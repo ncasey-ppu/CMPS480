@@ -4,8 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql2');
 const url = require('url');
-const express = require('express');
-const app = express();
 
 var host = 'localhost';
 var port = 3000;
@@ -55,6 +53,28 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // GET request for genre analytics
+  if (req.method === 'GET' && pathname === '/genres') {
+    const query = `
+      SELECT f.genre, COUNT(fc.student_id) AS total_students
+      FROM films f
+      LEFT JOIN film_crew fc ON f.film_id = fc.film_id
+      GROUP BY f.genre
+      ORDER BY total_students DESC
+    `;
+
+    connection.query(query, (err, results) => {
+      if (err) {
+        res.writeHead(500, {'Content-Type': 'text/plain'});
+        res.end('Database error');
+      } else {
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify(results));
+      }
+    });
+    return;
+  }
+
   //This  Serves static files
   if (pathname === '/') pathname = '/index.html';
   const filePath = path.join(__dirname, pathname);
@@ -70,26 +90,6 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {'Content-Type': getContentType(ext)});
     res.end(data);
   });
-});
-
-//Get request for genre ranking page
-app.get('/genres', (req, res) => {
-  const query = `
-  SELECT f.genre, COUNT(fc.student_id) AS total_students
-  FROM films f
-  LEFT JOIN film_crew fc ON f.film_id = fc.film_id
-  GROUP BY f.genre
-  ORDER BY total_students DESC
-  `;
-
-  connection.query(query, (err, results) => {
-  if (err) {
-    console.error(err);
-    return res.send('Error fetching data');
-  }
-
-  res.json(results);
-});
 });
 
 server.listen(port, host, () => {
