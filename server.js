@@ -71,7 +71,7 @@ const server = http.createServer((req, res) => {
 });
 
 //Get request for genre ranking page
-app.get('/cmps480/genres', (req, res) => {
+app.get('/genres', (req, res) => {
   const query = `
   SELECT f.genre, COUNT(fc.student_id) AS total_students
   FROM films f
