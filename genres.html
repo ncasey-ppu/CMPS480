@@ -19,9 +19,15 @@
 fetch('http://ncasey.it.pointpark.edu:3000/analytics/genres')
   .then(res => res.json())
   .then(result => {
-    const data = result.data;
+    console.log("RAW RESULT:", result);
 
-    console.log(data);
+    const data = result.data;
+    console.log("DATA ONLY:", data);
+
+    if (!data || data.length === 0) {
+      alert("No analytics data returned from server");
+      return;
+    }
 
     const labels = data.map(item => item.genre);
     const values = data.map(item => item.total_students);
@@ -31,31 +37,15 @@ fetch('http://ncasey.it.pointpark.edu:3000/analytics/genres')
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels,
         datasets: [{
           label: 'Students per Genre',
           data: values
         }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Student Participation by Genre'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
       }
     });
   })
-  .catch(error => {
-    console.error('Error loading data:', error);
-  });
+  .catch(err => console.error("FETCH ERROR:", err));
 </script>
 
 </body>
