@@ -142,11 +142,11 @@ const server = http.createServer(async (req, res) => {
         console.log("/analytics/genres endpoint hit");
 
         const sql = `
-          SELECT f.genre, COUNT(fc.student_id) AS total_students
+          SELECT f.genre, COUNT(fc.film_id) AS total_entries
           FROM films f
           LEFT JOIN film_crew fc ON f.film_id = fc.film_id
           GROUP BY f.genre
-          ORDER BY total_students DESC
+          ORDER BY total_entries DESC
         `;
 
         connection.query(sql, (err, results) => {
@@ -212,7 +212,7 @@ const server = http.createServer(async (req, res) => {
 
         const sqlCheck = `SELECT * FROM roles WHERE role_name = ?`;
 
-        connection.query(sqlCheck, [data.role_name], (err, result) => {
+        connection.query(sqlCheck, [data.role_name], (err, results) => {
             if (err) {
                 console.error("SQL Error: ", err);
                 res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -318,10 +318,13 @@ const server = http.createServer(async (req, res) => {
     // -------------------------------
     // STATIC FILE SERVING
     // -------------------------------
-    if (pathname === '/') pathname = '/index.html';
+    let cleanPath = pathname;
 
-    const cleanPath = pathname.replace('/cmps480', '');
-    const filePath = path.join(__dirname, cleanPath);
+    if (pathname.startsWith('/cmps480')) {
+      cleanPath = pathname.replace('/cmps480', '');
+    }
+
+    if (cleanPath === '/') cleanPath = '/index.html';
 
     fs.readFile(filePath, (err, data) => {
         if (err) {
@@ -339,5 +342,5 @@ const server = http.createServer(async (req, res) => {
 
 // Start server
 server.listen(port, host, () => {
-    console.log(`?? Server running at http://${host}:${port}`);
+    console.log(`Server running at http://${host}:${port}`);
 });
