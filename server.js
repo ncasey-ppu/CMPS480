@@ -138,8 +138,8 @@ const server = http.createServer(async (req, res) => {
     // -------------------------------
     // API ROUTE: GENRE ANALYTICS
     // -------------------------------
-    if (req.method === 'GET' && pathname === '/analytics/genres') {
-        console.log("/analytics/genres endpoint hit");
+    if (req.method === 'GET' && pathname === '/genres') {
+        console.log("/genres endpoint hit");
 
         const sql = `
           SELECT f.genre, COUNT(fc.student_id) AS total_students
@@ -320,7 +320,8 @@ const server = http.createServer(async (req, res) => {
     // -------------------------------
     if (pathname === '/') pathname = '/index.html';
 
-    const filePath = path.join(__dirname, pathname);
+    const cleanPath = pathname.replace('/cmps480', '');
+    const filePath = path.join(__dirname, cleanPath);
 
     fs.readFile(filePath, (err, data) => {
         if (err) {
