@@ -64,7 +64,13 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && pathname === '/movies') {
         console.log("/movies endpoint hit");
 
-        connection.query("SELECT * FROM movies", (err, results) => {
+        const sql = `
+        SELECT film_id, title, genre, year, run_time
+        FROM films
+        ORDER BY film_id DESC
+        `;
+
+        connection.query(sql, (err, results) => {
             if (err) {
                 console.error("SQL Error: ", err);
                 res.writeHead(500, { 'Content-Type': 'application/json' });
