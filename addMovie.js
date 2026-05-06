@@ -22,7 +22,7 @@ function addCrewRow() {
     `;
 
     container.appendChild(row);
-  }
+}
 
 //Make function globally accessible
 window.addCrewRow = addCrewRow;
