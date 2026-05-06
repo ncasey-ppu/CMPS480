@@ -76,7 +76,7 @@ const server = http.createServer(async (req, res) => {
 
         const sql = `
         SELECT film_id, title, genre, year, run_time
-        FROM films
+        FROM studentfilm.films
         ORDER BY film_id DESC
         `;
 
