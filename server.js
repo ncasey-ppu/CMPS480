@@ -150,11 +150,9 @@ const server = http.createServer((req, res) => {
 
         const sql = `
           SELECT 
-            f.genre, 
-            COUNT(fc.film_id) AS total_entries
-          FROM films f
-          LEFT JOIN film_crew fc 
-          ON f.film_id = fc.film_id
+            genre, 
+            COUNT(*) AS total_entries
+          FROM films
           GROUP BY f.genre
           ORDER BY total_entries DESC
         `;
