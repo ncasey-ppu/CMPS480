@@ -69,7 +69,7 @@ async function loadAnalytics() {
         const data = result.data || [];
 
         const labels = data.map(item => item.genre);
-        const values = data.map(item => item.total_students);
+        const values = data.map(item => item.total_entries);
 
         const ctx = document.getElementById("genreChart").getContext("2d");
 
