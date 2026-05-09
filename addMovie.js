@@ -44,7 +44,7 @@ document.querySelector(".form").addEventListener("submit", async function (e) {
             film_url: document.getElementById("film_url")?.value || ""
         };
 
-        const filmRes = await fetch("/films", {
+        const filmRes = await fetch("http://ncasey.it.pointpark.edu:3000/films", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(film)
@@ -64,7 +64,7 @@ document.querySelector(".form").addEventListener("submit", async function (e) {
 
 
             //Create or get roles
-            const roleRes = await fetch("/roles", {
+            const roleRes = await fetch("http://ncasey.it.pointpark.edu:3000/roles", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ role_name: roleName })
@@ -82,7 +82,7 @@ document.querySelector(".form").addEventListener("submit", async function (e) {
 
             // 2. If not found → create new student
             if (!student) {
-            const studentRes = await fetch("/students", {
+            const studentRes = await fetch("http://ncasey.it.pointpark.edu:3000/students", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -98,7 +98,7 @@ document.querySelector(".form").addEventListener("submit", async function (e) {
 
 
             //Link film crew
-            await fetch("/film-crew", {
+            await fetch("http://ncasey.it.pointpark.edu:3000/film-crew", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
