@@ -28,17 +28,23 @@ connection.connect(err => {
 });
 
 // Parse JSON body
-function getRequestBody(req) {
-    return new Promise((resolve, reject) => {
-        let body = '';
-        req.on('data', chunk => body += chunk);
-        req.on('end', () => {
-            try {
-                resolve(JSON.parse(body));
-            } catch (err) {
-                reject(err);
-            }
-        });
+function getRequestBody(req, callback) {
+
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk;
+    });
+
+    req.on('end', () => {
+
+        console.log("RAW BODY:", body);
+
+        const data = JSON.parse(body);
+
+        console.log("PARSED DATA:", data);
+
+        callback(data);
     });
 }
 
@@ -175,6 +181,8 @@ const server = http.createServer((req, res) => {
 
         getRequestBody(req, data => {
 
+            console.log("INSERTING FILM:", data);
+
             const sql = `
                 INSERT INTO films
                 (title, year, run_time, description, genre, course, film_url)
@@ -190,6 +198,8 @@ const server = http.createServer((req, res) => {
                 data.course || "",
                 data.film_url || ""
             ], (err, result) => {
+                console.log("SQL CALLBACK HIT");
+                console.log(result);
                 if (err) {
                     console.error("SQL Error: ", err);
                     res.writeHead(500, { 'Content-Type': 'application/json' });
