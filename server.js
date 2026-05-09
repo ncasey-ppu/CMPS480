@@ -153,7 +153,7 @@ const server = http.createServer((req, res) => {
             genre, 
             COUNT(*) AS total_entries
           FROM films
-          GROUP BY f.genre
+          GROUP BY genre
           ORDER BY total_entries DESC
         `;
 
