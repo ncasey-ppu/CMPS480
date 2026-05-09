@@ -77,11 +77,11 @@ document.querySelector(".form").addEventListener("submit", async function (e) {
             let student = null;
 
             // 1. Try to find existing student
-            const lookupRes = await fetch(`/students?name=${encodeURIComponent(name)}`);
+            const lookupRes = await fetch(`http://ncasey.it.pointpark.edu:3000/students?name=${encodeURIComponent(name)}`);
             student = await lookupRes.json();
 
             // 2. If not found → create new student
-            if (!student) {
+            if (!student.data) {
             const studentRes = await fetch("http://ncasey.it.pointpark.edu:3000/students", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -102,9 +102,9 @@ document.querySelector(".form").addEventListener("submit", async function (e) {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    film_id: savedFilm.film_id,
-                    student_id: student.student_id,
-                    role_id: role.role_id
+                    film_id: savedFilm.data.film_id,
+                    student_id: student.data.student_id,
+                    role_id: role.data.role_id
                 })
             });
         }
