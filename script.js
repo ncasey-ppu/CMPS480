@@ -11,14 +11,14 @@ async function loadMovies() {
         const res = await fetch("http://ncasey.it.pointpark.edu:3000/movies");
         const result = await res.json();
 
-        console.log("FULL API RESPONSE:", result);
-
-        const movies = result.data;
+        const movies = result.data || result;
 
         displayMovies(movies);
 
     } catch (err) {
         console.error("Error loading movies:", err);
+        document.getElementById("movieList").innerHTML =
+            "<p>Error loading films. Check console.</p>";
     }
 }
 
@@ -28,7 +28,7 @@ function displayMovies(movies) {
     container.innerHTML = "";
 
     if (!movies || movies.length === 0) {
-        container.innerHTML = "<p>No movies found</p>";
+        container.innerHTML = "<p>No films found.</p>";
         return;
     }
 
@@ -38,9 +38,9 @@ function displayMovies(movies) {
 
         card.innerHTML = `
             <h3>${movie.title}</h3>
-            <p><strong>Genre:</strong> ${movie.genre}</p>
-            <p><strong>Year:</strong> ${movie.year}</p>
-            <p><strong>Runtime:</strong> ${movie.run_time} min</p>
+            <p><strong>Genre:</strong> ${movie.genre || "N/A"}</p>
+            <p><strong>Year:</strong> ${movie.year || "N/A"}</p>
+            <p><strong>Run Time:</strong> ${movie.run_time || "N/A"} mins</p>
         `;
 
         container.appendChild(card);
