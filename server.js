@@ -154,7 +154,6 @@ const server = http.createServer((req, res) => {
             COUNT(*) AS total_entries
           FROM films
           GROUP BY genre
-          ORDER BY total_entries DESC
         `;
 
         connection.query(sql, (err, results) => {
